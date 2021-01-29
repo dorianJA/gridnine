@@ -23,12 +23,12 @@ public class FlightFilterImpl implements FlightFilterService {
 
     @Override
     public void printArrivalEarlierDeparture(List<Flight> flights) {
-        int[] count = new int[1];
         List<Flight> filterFlights = flights.stream().filter((flight -> flight.getSegments().size() > 1))
                 .filter((f) -> {
-                    boolean bool = f.getSegments()
-                            .get(count[0]).getArrivalDate().compareTo(f.getSegments().get(++count[0]).getDepartureDate()) < 0;
-                    count[0] = 0;
+                    boolean bool = false;
+                    for (int i = 0; i < f.getSegments().size() - 1; i++) {
+                        bool = f.getSegments().get(i).getArrivalDate().compareTo(f.getSegments().get(i + 1).getDepartureDate()) < 0;
+                    }
                     return bool;
                 })
                 .collect(Collectors.toList());
